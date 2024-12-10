@@ -9,17 +9,24 @@ package projetofinal;
  * @author rodri
  */
     public class Mecanico extends Pessoa{
-        private String especializaçao;
+        private String especializacao;
         
            
-        public Mecanico(String nome, int idade, String nacionalidade, String genero, String experiencia) {
+        public Mecanico(String nome, int idade, String nacionalidade, String genero, String experiencia, String especializacaoMecanico) {
             super(nome, idade, nacionalidade, genero, experiencia);
-            this.especializaçao = especializaçao;
+            this.especializacao = especializacao;
         }
 
         public String getEspecializaçao() {
-            return especializaçao;
+            return especializacao;
         }
         
-        
+    public void exibirInformacoesMecanico() {
+        // Exibe as informações do mecânico, incluindo a especialização
+        System.out.println("Nome: " + getNome());
+        System.out.println("Idade: " + getIdade());
+        System.out.println("Gênero: " + getGenero());
+        System.out.println("Nacionalidade: " + getNacionalidade());
+        System.out.println("Especialização: " + especializacao);
+    }
     }

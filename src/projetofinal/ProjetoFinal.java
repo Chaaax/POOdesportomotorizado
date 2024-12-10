@@ -44,234 +44,72 @@ public class ProjetoFinal {
             System.out.println("|Escolha uma opcao:                 |");
             option = scanner.nextInt();
             
-            
+            switch (option) {
+                case 1:
+                    System.out.print("Digite as informações do mecânico:");
+
+                   
+
+                    // Lê a idade do mecânico
+                    System.out.print("Idade: ");
+                    int idadeMecanico = scanner.nextInt(); 
+
+                    scanner.nextLine();  // Limpar o buffer após o nextInt() (isso evita a linha vazia)
+                    
+                     // Lê o nome do mecânico
+                    System.out.print("Nome: ");
+                    String nomeMecanico = scanner.nextLine(); 
+
+                    // Lê a nacionalidade do mecânico
+                    System.out.print("Nacionalidade: ");
+                    String nacionalidadeMecanico = scanner.nextLine(); 
+
+                    // Lê o gênero do mecânico
+                    System.out.print("Gênero: ");
+                    String generoMecanico = scanner.nextLine(); 
+
+                    // Lê a experiência do mecânico
+                    System.out.print("Experiência: ");
+                    String experienciaMecanico = scanner.nextLine(); 
+
+                    // Lê a especialização do mecânico
+                    System.out.print("Especialização: ");
+                    String especializacaoMecanico = scanner.nextLine(); 
+
+                    // Criar o mecânico usando o construtor
+                    Mecanico mecanico = new Mecanico(nomeMecanico, idadeMecanico, nacionalidadeMecanico, generoMecanico, experienciaMecanico, especializacaoMecanico);
+
+                    // Mensagem de confirmação
+                    System.out.println("Mecânico registrado com sucesso!");
+                    break;
+                case 2:
+                    System.out.println("Registar Piloto:");
+                    // Código para registar um piloto
+                    break;
+                case 3:
+                    System.out.println("Registar Veiculo:");
+                    // Código para registar um veiculo
+                    break;
+                case 4:
+                    System.out.println("Criar Equipa:");
+                    // Código para criar uma equipa
+                    break;
+                case 5:
+                    System.out.println("Registar Resultado:");
+                    // Código para registar resultado
+                    break;
+                case 6:
+                    System.out.println("Calcular Estatísticas:");
+                    // Código para calcular estatísticas
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+                    break;
+            }
         }
+        scanner.close();
     }
 }
-
-    //class pessoa
-   /* class pessoa{
-       private String nome;
-       private int idade;
-       private String nacionalidade;
-       private String genero;
-
-       
-     //construtor
-       
-       public pessoa(String nome, int idade, String nacionalidade, String genero){
-           this.nome=nome;
-           this.idade=idade;
-           this.nacionalidade=nacionalidade;
-           this.genero=genero;
-       }
-        //getters
-        public String getNome() {
-            return nome;
-        }
-
-        public int getIdade() {
-            return idade;
-        }
-
-        public String getNacionalidade() {
-            return nacionalidade;
-        }
-
-        public String getGenero() {
-            return genero;
-        }
-       
-       //Setters
-
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
-
-        public void setIdade(int idade) {
-            this.idade = idade;
-        }
-
-        public void setNacionalidade(String nacionalidade) {
-            this.nacionalidade = nacionalidade;
-        }
-
-        public void setGenero(String genero) {
-            this.genero = genero;
-        }
-        
-        //Exibir informaçoes pessoa 
-        
-        public void exibirInformacoes() {
-            System.out.println("Nome: " + nome);
-            System.out.println("Idade: " + idade);
-            System.out.println("Gênero: " + genero);
-            System.out.println("Nacionalidade: " + nacionalidade);
-        }
-    }   
-    abstract class Profissional extends pessoa {
-            private int experiencia;
-            
-    // Construtor 
-    public Profissional(String nome, int idade, String nacionalidade, String genero, int experiencia) {
-        super(nome, idade, nacionalidade, genero);
-        this.experiencia = experiencia;
-    }
-    
-    }
-    
-    class piloto extends Profissional{
-        private String StatusNaEquipa;
-        //construtor
-        public piloto(String nome, int idade, String nacionalidade, String genero, int experiencia) {
-                   super(nome, idade, nacionalidade, genero, experiencia);
-                   this.StatusNaEquipa = StatusNaEquipa;
-               }
-
-        public String getStatusNaEquipa() {
-            return StatusNaEquipa;
-        }
-        
-        
-    }
-    
-    class Mecanico extends Profissional{
-        private String especializaçao;
-
-        public Mecanico(String nome, int idade, String nacionalidade, String genero, int experiencia) {
-            super(nome, idade, nacionalidade, genero, experiencia);
-            this.especializaçao = especializaçao;
-        }
-
-        public String getEspecializaçao() {
-            return especializaçao;
-        }
-        
-        
-    }
-   
-     class Engenheiro extends Profissional{
-        private String especializaçao;
-
-        public Engenheiro(String nome, int idade, String nacionalidade, String genero, int experiencia) {
-            super(nome, idade, nacionalidade, genero, experiencia);
-            this.especializaçao = especializaçao;
-        }
-
-        public String getEspecializaçao() {
-            return especializaçao;
-        }
-        
-        
-    }
-     
-    class Veiculo {
-        private String tipoDeVeiculo;
-        private String categoria;
-        private int potencia;
-        private int peso;
-        private boolean emManutencao;
-        private String cor;
-        private String numeroDoCarro;
-        private String marcaDoMotor;
-        private String pneus;
-        
-
-    public Veiculo(String tipo, String categoria, int potencia, int peso) {
-        this.tipoDeVeiculo = tipoDeVeiculo;
-        this.categoria = categoria;
-        this.potencia = potencia;
-        this.peso = peso;
-        this.emManutencao = false;
-        this.cor=cor;
-        this.numeroDoCarro=numeroDoCarro;
-        this.marcaDoMotor=marcaDoMotor;
-        this.pneus=pneus;
-    }
-
-    //getters
-        public String getTipoDeVeiculo() {
-            return tipoDeVeiculo;
-        }
-
-        public String getCategoria() {
-            return categoria;
-        }
-
-        public int getPotencia() {
-            return potencia;
-        }
-
-        public int getPeso() {
-            return peso;
-        }
-
-        public boolean isEmManutencao() {
-            return emManutencao;
-        }
-
-        public String getCor() {
-            return cor;
-        }
-
-        public String getNumeroDoCarro() {
-            return numeroDoCarro;
-        }
-
-        public String getMarcaDoMotor() {
-            return marcaDoMotor;
-        }
-
-        public String getPneus() {
-            return pneus;
-        }
-    
-    //setters
-
-        public void setTipoDeVeiculo(String tipoDeVeiculo) {
-            this.tipoDeVeiculo = tipoDeVeiculo;
-        }
-
-        public void setCategoria(String categoria) {
-            this.categoria = categoria;
-        }
-
-        public void setPotencia(int potencia) {
-            this.potencia = potencia;
-        }
-
-        public void setPeso(int peso) {
-            this.peso = peso;
-        }
-
-        public void setEmManutencao(boolean emManutencao) {
-            this.emManutencao = emManutencao;
-        }
-
-        public void setCor(String cor) {
-            this.cor = cor;
-        }
-
-        public void setNumeroDoCarro(String numeroDoCarro) {
-            this.numeroDoCarro = numeroDoCarro;
-        }
-
-        public void setMarcaDoMotor(String marcaDoMotor) {
-            this.marcaDoMotor = marcaDoMotor;
-        }
-
-        public void setPneus(String pneus) {
-            this.pneus = pneus;
-        }
-        
-    }     */  
-    
-    
-    
-    
-    
-         
-         
-         
-    
-

@@ -76,12 +76,13 @@ package projetofinal;
            *Exibir informaçoes pessoa 
         */
          
-        
+        /**
         public void exibirInformacoes() {
             System.out.println("Nome: " + nome);
             System.out.println("Idade: " + idade);
             System.out.println("Gênero: " + genero);
             System.out.println("Nacionalidade: " + nacionalidade);
         }
+        */
     }   
 
