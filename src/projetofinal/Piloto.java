@@ -37,6 +37,20 @@ public class Piloto extends Pessoa {
     }
     
     
+    
+   @Override
+    public String toString() {
+        return "Nome: " + getNome() + 
+               ", Idade: " + getIdade() + 
+               ", Nacionalidade: " + getNacionalidade() + 
+               ", Genero: " + getGenero() + 
+               ", Experiencia: " + getExperiencia() + 
+               ", Hierarquia: " + hierarquia+
+               ", Peso: " + pesoPiloto;
+}
+    
+    
+    
       //ideia para calcular lastro
 
     

@@ -69,6 +69,18 @@ package projetofinal;
         public void setExperiencia(String experiencia) {
             this.experiencia = experiencia;
         }
+
+    /*@Override
+    public String toString() {
+        return "Pessoa{" + "nome=" + nome + ", idade=" + idade + ", nacionalidade=" + nacionalidade + ", genero=" + genero + ", experiencia=" + experiencia + '}';
+    }
+        
+       */
+        
+        @Override
+       public String toString() {
+               return getNome() + "," + getIdade() + "," + getNacionalidade() + "," + getGenero() + "," + getExperiencia();}
+        
         
         
         

@@ -20,7 +20,7 @@ public abstract class Veiculo {
         private String pneus;
         
 
-    public Veiculo(String tipo, String categoria, int potencia, int peso) {
+    public Veiculo(String tipoDeVeiculo, String categoria, int potencia, int peso, String cor, String numeroDoVeiculo, String marcaDoMotor, String pneus) {
         this.tipoDeVeiculo = tipoDeVeiculo;
         this.categoria = categoria;
         this.potencia = potencia;

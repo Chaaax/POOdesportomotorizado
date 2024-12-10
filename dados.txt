@@ -1,0 +1,6 @@
+[MECANICOS]
+[PILOTOS]
+[Nome: rodrigo, Idade: 23, Nacionalidade: pt, Genero: masculino, Experiencia: pouca, Hierarquia: primeiro, Peso: 76.0]
+[MECANICOS]
+[Nome: rodrigo, Idade: 45, Nacionalidade: portugues, Gênero: masculino, Experiência: pouca, Especialização: rodas]
+[PILOTOS]

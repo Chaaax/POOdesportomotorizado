@@ -9,11 +9,7 @@ package projetofinal;
  * @author rodri
  */
 public class Moto extends Veiculo {
-    public Moto(String tipo, String categoria, int potencia, int peso, String cor, String numeroDoVeiculo, String marcaDoMotor, String pneus) {
-        super(tipo, categoria, potencia, peso); // Chama o construtor da classe mãe (Veiculo)
-        this.setCor(cor);
-        this.setNumeroDoVeiculo(numeroDoVeiculo);
-        this.setMarcaDoMotor(marcaDoMotor);
-        this.setPneus(pneus);
+    public Moto(String tipoDeVeiculo, String categoria, int potencia, int peso, String cor,boolean emManutencao,String numeroDoVeiculo, String marcaDoMotor, String pneus) {
+        super(tipoDeVeiculo, categoria, potencia, peso, cor, emManutencao,numeroDoVeiculo, marcaDoMotor, pneus); 
     }
 }
