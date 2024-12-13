@@ -37,6 +37,14 @@ package projetofinal;
         this.especializaçao = especializaçao;
     }
         
-        
+  @Override
+        public String toString() {
+            return "Nome: " + getNome() + 
+                   ", Idade: " + getIdade() + 
+                   ", Nacionalidade: " + getNacionalidade() + 
+                   ", Gênero: " + getGenero() + 
+                   ", Experiência: " + getExperiencia() + 
+                   ", Especialização: " + especializaçao;
+        } 
         
     }

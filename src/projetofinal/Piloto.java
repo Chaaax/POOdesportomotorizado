@@ -18,7 +18,14 @@ public class Piloto extends Pessoa {
         this.hierarquia=hierarquia;
         this.pesoPiloto=pesoPiloto;
     }
-
+    
+    public Piloto(String nome) {
+        super(nome, 0, "", "", ""); // Inicializa com valores padrão
+        this.hierarquia = "";
+        this.pesoPiloto = 0.0;
+    }
+      
+      
     public String getHierarquia() {
         return hierarquia;
     }

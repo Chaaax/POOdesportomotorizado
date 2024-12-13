@@ -37,31 +37,32 @@ public class Dados {
             }
 
             // Salvar Engenheiros
+            writer.write("[ENGENHEIROS]");
+            writer.newLine();
             if (engenheiros != null) {
-                writer.write("[ENGENHEIROS]");
-                writer.newLine();
                 for (Engenheiro engenheiro : engenheiros) {
-                    writer.write(engenheiro.toString());
+                    writer.write(engenheiros.toString());
                     writer.newLine();
                 }
             }
 
             // Salvar Veiculos
+            writer.write("[VEICULOS]");
+            writer.newLine();
             if (veiculos != null) {
-                writer.write("[VEICULOS]");
-                writer.newLine();
+        
                 for (Veiculo veiculo : veiculos) {
-                    writer.write(veiculo.toString());
+                    writer.write(veiculos.toString());
                     writer.newLine();
                 }
             }
 
             // Salvar Equipas
+            writer.write("[EQUIPAS]");
+            writer.newLine();
             if (equipas != null) {
-                writer.write("[EQUIPAS]");
-                writer.newLine();
                 for (Equipa equipa : equipas) {
-                    writer.write(equipa.toString());
+                    writer.write(equipas.toString());
                     writer.newLine();
                 }
             }

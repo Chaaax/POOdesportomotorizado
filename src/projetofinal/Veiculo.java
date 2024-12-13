@@ -107,4 +107,17 @@ public abstract class Veiculo {
             this.pneus = pneus;
         }
         
+        
+        @Override
+        public String toString() {
+            return "Tipo de Veículo: " + tipoDeVeiculo +
+                   ", Categoria: " + categoria +
+                   ", Potência: " + potencia + 
+                   " HP, Peso: " + peso + " kg, " +
+                   "Em Manutenção: " + (emManutencao ? "Sim" : "Não") +
+                   ", Cor: " + cor +
+                   ", Número do Veículo: " + numeroDoVeiculo +
+                   ", Marca do Motor: " + marcaDoMotor +
+                   ", Pneus: " + pneus;
+        }
     }       

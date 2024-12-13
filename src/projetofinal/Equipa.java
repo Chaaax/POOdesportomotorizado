@@ -18,7 +18,7 @@ public class Equipa {
     private List<Veiculo> veiculos;
     private List<String> resultados;
 
-    public Equipa(String nome, String categoria) {
+    public Equipa(String nomeDaEquipa, String categoria) {
         this.nomeDaEquipa = nomeDaEquipa;
         this.categoria = categoria;
         this.membros = new ArrayList<>();
@@ -34,6 +34,11 @@ public class Equipa {
     public String getCategoria() {
         return categoria;
     }
+    
+    public List<Pessoa> getMembros() {
+        return membros; // Retorna a lista de membros
+    }
+    
 
      public void adicionarMembro(Pessoa membro) {
         membros.add(membro);
@@ -68,5 +73,35 @@ public class Equipa {
         this.resultados = resultados;
     }
     
+ /*@Override
+    public String toString() {
+        return "[Nome da Equipa: " + nomeDaEquipa + ", Categoria: " + categoria + "]";
+    }
+  */
     
+    @Override
+public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[Nome da Equipa: ").append(nomeDaEquipa)
+      .append(", Categoria: ").append(categoria).append(", Membros: ");
+    
+    if (membros != null && !membros.isEmpty()) {
+        for (Pessoa membro : membros) {
+            if (membro instanceof Piloto) {
+                sb.append("Piloto: ").append(membro.getNome()).append(", ");
+            } else if (membro instanceof Mecanico) {
+                sb.append("Mecânico: ").append(membro.getNome()).append(", ");
+            } else if (membro instanceof Engenheiro) {
+                sb.append("Engenheiro: ").append(membro.getNome()).append(", ");
+            }
+        }
+        // Remover a vírgula extra no final
+        sb.setLength(sb.length() - 2);
+    } else {
+        sb.append("Nenhum membro registrado.");
+    }
+    sb.append("]");
+    return sb.toString();
+}
+
 }
