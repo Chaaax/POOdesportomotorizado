@@ -10,8 +10,10 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  *
@@ -45,7 +47,7 @@ public class ProjetoFinal{
             System.out.println("| 8 - Mostrar Engenheiros           |");
             System.out.println("| 9 - Mostrar Veiculos              |");
             System.out.println("| 10 - Mostrar Equipas              |");
-            System.out.println("| 11 - Adicionar professores        |");
+            System.out.println("| 11 - Adicionar Pilotos            |");
             System.out.println("| 12 - Remover Aluno                |");
             System.out.println("| 13 - Remover cursos               |");
             System.out.println("| 14 - Remover disciplinas          |");
@@ -151,53 +153,55 @@ public class ProjetoFinal{
                         Dados.salvarDados(mecanicos, null, null, null, null);
 
                         // Mensagem de confirmação
-                        System.out.println("Mecanico r1egistrado com sucesso!");
+                        System.out.println("Mecanico registado com sucesso!");
          }
 
 
-        public static void registarPiloto(List<Piloto> pilotos, Scanner scanner){
-                        System.out.print("Digite as informacoes do Piloto:");
-                        // Lê a idade do mecânico
-                        scanner.nextLine();
-                        
-                        System.out.print("Nome: ");
-                        String nomePiloto = scanner.nextLine(); 
-                        
-                        System.out.print("Idade: ");
-                        int idadePiloto = scanner.nextInt(); 
-                        scanner.nextLine();  // Limpar o buffer após o nextInt() (isso evita a linha vazia)
+        public static void registarPiloto(List<Piloto> pilotos, Scanner scanner) {
+                System.out.println("Digite as informações do Piloto:");
 
-                        // Lê a nacionalidade do mecânico
-                        System.out.print("Nacionalidade: ");
-                        String nacionalidadePiloto = scanner.nextLine(); 
+                scanner.nextLine(); // Limpa o buffer, caso necessário
 
-                        // Lê o gênero do mecânico
-                        System.out.print("Genero: ");
-                        String generoPiloto = scanner.nextLine(); 
+                System.out.print("Nome: ");
+                String nomePiloto = scanner.nextLine();
 
-                        // Lê a experiência do mecânico
-                        System.out.print("Experiencia: ");
-                        String experienciaPiloto = scanner.nextLine(); 
+                System.out.print("Idade: ");
+                int idadePiloto = scanner.nextInt();
+                scanner.nextLine(); // Limpa o buffer após o nextInt()
 
-                        // Lê a especialização do mecânico
-                        System.out.print("Hierarquia: ");
-                        String hierarquiaPiloto = scanner.nextLine();                   
+                System.out.print("Nacionalidade: ");
+                String nacionalidadePiloto = scanner.nextLine();
 
-                        System.out.print("Peso: ");
-                        double pesoPiloto = scanner.nextDouble();
-                        scanner.nextLine(); // Limpar o buffer após o nextDouble()
+                System.out.print("Gênero: ");
+                String generoPiloto = scanner.nextLine();
 
-                        // Criar o objeto Piloto usando o construtor
-                        Piloto piloto = new Piloto(nomePiloto, idadePiloto, nacionalidadePiloto, generoPiloto, experienciaPiloto, hierarquiaPiloto, pesoPiloto);
+                System.out.print("Experiência: ");
+                String experienciaPiloto = scanner.nextLine();
 
-                        // Adicionar o piloto à lista
-                        pilotos.add(piloto);
-                        
-                        Dados.salvarDados(null, pilotos, null, null, null);
+                System.out.print("Hierarquia: ");
+                String hierarquiaPiloto = scanner.nextLine();
 
-                        // Mensagem de confirmação
-                        System.out.println("Piloto registrado com sucesso!");
-                    }
+                System.out.print("Peso: ");
+                double pesoPiloto = scanner.nextDouble();
+                scanner.nextLine(); // Limpa o buffer após o nextDouble()
+
+                // Cria o piloto usando o construtor básico
+                Piloto piloto = new Piloto(nomePiloto, idadePiloto, nacionalidadePiloto, generoPiloto, experienciaPiloto);
+
+                // Define os atributos adicionais
+                piloto.setHierarquia(hierarquiaPiloto);
+                piloto.setPesoPiloto(pesoPiloto);
+
+                // Adiciona o piloto à lista
+                pilotos.add(piloto);
+
+                // Salva os dados
+                Dados.salvarPiloto(piloto);
+
+                // Mensagem de confirmação
+                System.out.println("Piloto registrado com sucesso!");
+            }
+
 
        
     public static void registarEngenheiro(List<Engenheiro> engenheiros, Scanner scanner){
@@ -361,58 +365,77 @@ public class ProjetoFinal{
 }
          
       
-      public static void consultarPilotos() {
-            try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
-                String linha;
-                boolean isPilotoSection = false;
+  public static void consultarPilotos() {
+    try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
+        String linha;
+        boolean isPilotoSection = false;
+        boolean isEquipaSection = false;
+        List<Equipa> equipas = new ArrayList<>();
 
-                System.out.println("Consultando pilotos...\n");
-                System.out.printf("%-20s%-10s%-20s%-15s%-15s%-20s%-15s%n", "Nome", "Idade", "Nacionalidade", "Genero", "Experiencia", "Hierarquia", "Peso");
-                System.out.println("-------------------------------------------------------------------------------------------------------------");
+        System.out.println("Consultando pilotos...\n");
+        System.out.printf("%-20s%-10s%-20s%-15s%-15s%-20s%-15s%-20s%n", "Nome", "Idade", "Nacionalidade", "Genero", "Experiencia", "Hierarquia", "Peso", "Equipas");
+        System.out.println("----------------------------------------------------------------------------------------------------------------------------");
 
-                while ((linha = reader.readLine()) != null) {
-                    // Detectar a seção correta
-                    if (linha.trim().equals("[PILOTOS]")) {
-                        isPilotoSection = true;  // Entra na seção dos pilotos
-                    } else if (linha.trim().equals("[MECANICOS]")) {
-                        isPilotoSection = false; // Sai da seção dos pilotos
-                    } else if (isPilotoSection && linha.contains("Nome:")) {
-                        // Processa e exibe os dados de cada piloto
-                        try {
-                            // Remover os colchetes antes de processar
-                            linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-
-                            // Dividir a linha em partes com base na vírgula
-                            String[] partes = linha.split(", ");
-
-                            // Verificar se todas as partes estão presentes
-                            if (partes.length >= 6) {
-                                // Extrair os dados de cada parte
-                                String nome = partes[0].split(": ")[1];
-                                String idade = partes[1].split(": ")[1];
-                                String nacionalidade = partes[2].split(": ")[1];
-                                String genero = partes[3].split(": ")[1];
-                                String experiencia = partes[4].split(": ")[1];
-                                String hierarquia = partes[5].split(": ")[1];
-
-                                // Verificar se o peso está presente (se houver um número de partes maior que 6)
-                                String peso = partes.length > 6 ? partes[6].split(": ")[1] : "N/A"; // Protege contra faltas de peso
-
-                                // Exibe as informações formatadas
-                                System.out.printf("%-20s%-10s%-20s%-15s%-15s%-20s%-15s%n", nome, idade, nacionalidade, genero, experiencia, hierarquia, peso);
-                            } else {
-                                System.out.println("Erro: Linha não contém dados completos: " + linha);
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Erro ao processar a linha: " + linha);
-                            e.printStackTrace();  // Imprimir a stack trace para depuração detalhada
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+        while ((linha = reader.readLine()) != null) {
+            // Detectar a seção correta
+            if (linha.trim().equals("[PILOTOS]")) {
+                isPilotoSection = true;  // Entra na seção dos pilotos
+            } else if (linha.trim().equals("[EQUIPAS]") || linha.trim().equals("[MECANICOS]") || linha.trim().equals("[ENGENHEIROS]") || linha.trim().equals("[VEICULOS]")) {
+                isPilotoSection = false; // Sai da seção dos pilotos
             }
-      }
+
+            // Processa e exibe os dados de cada piloto
+            if (isPilotoSection && linha.contains("Nome:")) {
+                try {
+                    // Remover os colchetes antes de processar
+                    linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
+
+                    // Dividir a linha em partes com base na vírgula
+                    String[] partes = linha.split(", ");
+
+                    // Verificar se todas as partes estão presentes
+                    if (partes.length >= 6) {
+                        // Extrair os dados de cada parte
+                        String nome = partes[0].split(": ")[1];
+                        String idade = partes[1].split(": ")[1];
+                        String nacionalidade = partes[2].split(": ")[1];
+                        String genero = partes[3].split(": ")[1];
+                        String experiencia = partes[4].split(": ")[1];
+                        String hierarquia = partes[5].split(": ")[1];
+
+                        // Verificar se o peso está presente (se houver um número de partes maior que 6)
+                        String peso = partes.length > 6 ? partes[6].split(": ")[1] : "N/A"; // Protege contra faltas de peso
+
+                        // Agora, vamos buscar as equipas associadas ao piloto
+                        StringBuilder equipasAssociadas = new StringBuilder();
+                        if (linha.contains("Equipas:")) {
+                            String equipasString = linha.split("Equipas: ")[1];
+                            String[] equipasList = equipasString.split(", ");
+                            for (String equipa : equipasList) {
+                                equipasAssociadas.append(equipa).append(", ");
+                            }
+                            // Remover a última vírgula
+                            if (equipasAssociadas.length() > 0) {
+                                equipasAssociadas.setLength(equipasAssociadas.length() - 2);
+                            }
+                        }
+
+                        // Exibe as informações formatadas com as equipas
+                        System.out.printf("%-20s%-10s%-20s%-15s%-15s%-20s%-15s%-20s%n", nome, idade, nacionalidade, genero, experiencia, hierarquia, peso, equipasAssociadas.toString());
+                    } else {
+                        System.out.println("Erro: Linha não contém dados completos: " + linha);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Erro ao processar a linha: " + linha);
+                    e.printStackTrace();  // Imprimir a stack trace para depuração detalhada
+                }
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+    }
+}
+
             
     public static void consultarEngenheiros() {
         try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
@@ -522,7 +545,7 @@ public class ProjetoFinal{
     }
 }
     
-    public static void consultarEquipas() {
+   public static void consultarEquipas() {
     try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
         String linha;
         boolean isEquipaSection = false;
@@ -543,7 +566,7 @@ public class ProjetoFinal{
                     String[] partes = linha.split(", ");
                     String nomeDaEquipa = null;
                     String categoria = null;
-                    String membros = null;
+                    StringBuilder membros = new StringBuilder();  // Usando StringBuilder para eficiência
 
                     for (String parte : partes) {
                         if (parte.startsWith("Nome da Equipa:")) {
@@ -551,12 +574,20 @@ public class ProjetoFinal{
                         } else if (parte.startsWith("Categoria:")) {
                             categoria = parte.split(": ")[1].trim();
                         } else if (parte.startsWith("Membros:")) {
-                            membros = parte.split(": ")[1].trim();
+                            // Remover o prefixo "Membros:" e separar os membros
+                            String[] membrosArray = parte.split(": ")[1].split(", ");
+                            for (String membro : membrosArray) {
+                                membros.append(membro).append(", ");  // Adiciona cada membro à lista
+                            }
+                            // Remover a última vírgula e espaço extra
+                            if (membros.length() > 2) {
+                                membros.setLength(membros.length() - 2);  // Remove a vírgula final
+                            }
                         }
                     }
 
                     // Exibe as informações formatadas
-                    System.out.printf("%-30s%-20s%-50s%n", nomeDaEquipa, categoria, membros);
+                    System.out.printf("%-30s%-20s%-50s%n", nomeDaEquipa, categoria, membros.toString());
 
                 } catch (Exception e) {
                     System.out.println("Erro ao processar a linha: " + linha);
@@ -570,7 +601,169 @@ public class ProjetoFinal{
 }
 
 
-   public static void adicionarPilotoEquipa() {
+/* quase perfeito
+public static void adicionarPilotoEquipa() {
+    try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
+        String linha;
+        boolean isPilotoSection = false;
+        boolean isEquipaSection = false;
+
+        List<Piloto> pilotos = new ArrayList<>();
+        List<Equipa> equipas = new ArrayList<>();
+
+        // Ler todos os pilotos e equipas do arquivo
+        while ((linha = reader.readLine()) != null) {
+            if (linha.trim().equals("[PILOTOS]")) {
+                isPilotoSection = true;  // Entra na seção dos pilotos
+            } else if (linha.trim().equals("[EQUIPAS]")) {
+                isEquipaSection = true;  // Entra na seção das equipas
+            } else if (linha.trim().equals("[MECANICOS]") || linha.trim().equals("[ENGENHEIROS]") || linha.trim().equals("[VEICULOS]")) {
+                isPilotoSection = false;
+                isEquipaSection = false;  // Sai das seções dos pilotos e equipas
+            }
+
+            // Processar pilotos
+            if (isPilotoSection && linha.contains("Nome:")) {
+                try {
+                    linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
+                    String[] partes = linha.split(", ");  // Divide a linha
+
+                    String nomePiloto = null;
+                    int idade = 0;  // Corrigido para idade do piloto
+                    String nacionalidade = null;
+                    String genero = null;
+                    String experiencia = null;
+                    String hierarquia = null;
+                    double pesoPiloto = 0.0;
+
+                    for (String parte : partes) {
+                        if (parte.startsWith("Nome:")) {
+                            nomePiloto = parte.split(": ")[1].trim();
+                        } else if (parte.startsWith("Idade:")) {
+                            idade = Integer.parseInt(parte.split(": ")[1].trim());  // Converte idade para inteiro
+                        } else if (parte.startsWith("Nacionalidade:")) {
+                            nacionalidade = parte.split(": ")[1].trim();
+                        } else if (parte.startsWith("Genero:")) {
+                            genero = parte.split(": ")[1].trim();
+                        } else if (parte.startsWith("Experiencia:")) {
+                            experiencia = parte.split(": ")[1].trim();
+                        } else if (parte.startsWith("Hierarquia:")) {
+                            hierarquia = parte.split(": ")[1].trim();
+                        } else if (parte.startsWith("Peso:")) {
+                            pesoPiloto = Double.parseDouble(parte.split(": ")[1].trim());
+                        }
+                    }
+
+                    if (nomePiloto != null) {
+                        Piloto piloto = new Piloto(nomePiloto, idade, nacionalidade, genero, experiencia);
+                        piloto.setHierarquia(hierarquia);
+                        piloto.setPesoPiloto(pesoPiloto);
+                        pilotos.add(piloto);  // Adiciona o piloto à lista
+                    }
+                } catch (Exception e) {
+                    System.out.println("Erro ao processar piloto: " + linha);
+                }
+            }
+
+            // Processar equipas
+            if (isEquipaSection && linha.contains("Nome da Equipa:")) {
+                try {
+                    linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
+                    String[] partes = linha.split(", ");  // Divide a linha
+
+                    String nomeDaEquipa = null;
+                    String categoria = null;
+
+                    if (partes.length > 1) {
+                        for (String parte : partes) {
+                            if (parte.startsWith("Nome da Equipa:")) {
+                                nomeDaEquipa = parte.split(": ")[1].trim();
+                            } else if (parte.startsWith("Categoria:")) {
+                                categoria = parte.split(": ")[1].trim();
+                            }
+                        }
+
+                        if (nomeDaEquipa != null && categoria != null) {
+                            equipas.add(new Equipa(nomeDaEquipa, categoria));  // Adiciona a equipa à lista
+                        }
+                    } else {
+                        System.out.println("Erro: Formato de linha inválido ou membros não encontrados: " + linha);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Erro ao processar equipa: " + linha);
+                }
+            }
+        }
+
+        // Exibir pilotos
+        System.out.println("Escolha um piloto da lista abaixo:");
+        for (int i = 0; i < pilotos.size(); i++) {
+            System.out.println((i + 1) + ". " + pilotos.get(i).getNome());
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Digite o número do piloto que deseja adicionar à equipa: ");
+        int pilotoEscolhidoIndex = scanner.nextInt() - 1;
+
+        if (pilotoEscolhidoIndex < 0 || pilotoEscolhidoIndex >= pilotos.size()) {
+            System.out.println("Opção inválida para piloto.");
+            return;
+        }
+
+        Piloto pilotoEscolhido = pilotos.get(pilotoEscolhidoIndex);
+
+        // Exibir equipas
+        System.out.println("Escolha uma equipa da lista abaixo:");
+        for (int i = 0; i < equipas.size(); i++) {
+            System.out.println((i + 1) + ". " + equipas.get(i).getNomeDaEquipa());
+        }
+
+        System.out.print("Digite o número da equipa para adicionar o piloto: ");
+        int equipaEscolhidaIndex = scanner.nextInt() - 1;
+
+        if (equipaEscolhidaIndex < 0 || equipaEscolhidaIndex >= equipas.size()) {
+            System.out.println("Opção inválida para equipa.");
+            return;
+        }
+
+        Equipa equipaEscolhida = equipas.get(equipaEscolhidaIndex);
+
+        // Adicionar o piloto à equipa
+        equipaEscolhida.adicionarMembro(pilotoEscolhido);
+        pilotoEscolhido.adicionarEquipa(equipaEscolhida);  // Adiciona a equipa ao piloto
+        System.out.println("Piloto " + pilotoEscolhido.getNome() + " foi adicionado à equipa " + equipaEscolhida.getNomeDaEquipa());
+
+        // Salvar os dados de volta no arquivo
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
+            writer.write("[PILOTOS]\n");
+            for (Piloto p : pilotos) {
+                writer.write("[Nome: " + p.getNome() + ", Idade: " + p.getIdade() + ", Nacionalidade: " + p.getNacionalidade() + ", Genero: " + p.getGenero() + ", Experiencia: " + p.getExperiencia() + ", Hierarquia: " + p.getHierarquia() + ", Peso: " + p.getPesoPiloto() + ", Equipas: ");
+                for (Equipa e : p.getEquipas()) {
+                    writer.write(e.getNomeDaEquipa() + ", ");
+                }
+                writer.write("]\n");
+            }
+            writer.write("[EQUIPAS]\n");
+            for (Equipa e : equipas) {
+                writer.write("[Nome da Equipa: " + e.getNomeDaEquipa() + ", Categoria: " + e.getCategoria() + ", Membros: ");
+                for (Pessoa membro : e.getMembros()) {
+                    if (membro instanceof Piloto) {
+                        writer.write(((Piloto) membro).getNome() + ", ");
+                    }
+                }
+                writer.write("]\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar os dados no arquivo.");
+        }
+    } catch (IOException e) {
+        System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+    }
+}
+*/
+  
+    public static void adicionarPilotoEquipa() {
         try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
             String linha;
             boolean isPilotoSection = false;
@@ -594,16 +787,39 @@ public class ProjetoFinal{
                 if (isPilotoSection && linha.contains("Nome:")) {
                     try {
                         linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-                        String[] partes = linha.split(", ");
+                        String[] partes = linha.split(", ");  // Divide a linha
 
                         String nomePiloto = null;
+                        int idade = 0;
+                        String nacionalidade = null;
+                        String genero = null;
+                        String experiencia = null;
+                        String hierarquia = null;
+                        double pesoPiloto = 0.0;
+
                         for (String parte : partes) {
                             if (parte.startsWith("Nome:")) {
                                 nomePiloto = parte.split(": ")[1].trim();
+                            } else if (parte.startsWith("Idade:")) {
+                                idade = Integer.parseInt(parte.split(": ")[1].trim());
+                            } else if (parte.startsWith("Nacionalidade:")) {
+                                nacionalidade = parte.split(": ")[1].trim();
+                            } else if (parte.startsWith("Genero:")) {
+                                genero = parte.split(": ")[1].trim();
+                            } else if (parte.startsWith("Experiencia:")) {
+                                experiencia = parte.split(": ")[1].trim();
+                            } else if (parte.startsWith("Hierarquia:")) {
+                                hierarquia = parte.split(": ")[1].trim();
+                            } else if (parte.startsWith("Peso:")) {
+                                pesoPiloto = Double.parseDouble(parte.split(": ")[1].trim());
                             }
                         }
+
                         if (nomePiloto != null) {
-                            pilotos.add(new Piloto(nomePiloto));  // Usando o novo construtor
+                            Piloto piloto = new Piloto(nomePiloto, idade, nacionalidade, genero, experiencia);
+                            piloto.setHierarquia(hierarquia);
+                            piloto.setPesoPiloto(pesoPiloto);
+                            pilotos.add(piloto);  // Adiciona o piloto à lista
                         }
                     } catch (Exception e) {
                         System.out.println("Erro ao processar piloto: " + linha);
@@ -614,20 +830,25 @@ public class ProjetoFinal{
                 if (isEquipaSection && linha.contains("Nome da Equipa:")) {
                     try {
                         linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-                        String[] partes = linha.split(", ");
+                        String[] partes = linha.split(", ");  // Divide a linha
 
                         String nomeDaEquipa = null;
                         String categoria = null;
-                        for (String parte : partes) {
-                            if (parte.startsWith("Nome da Equipa:")) {
-                                nomeDaEquipa = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Categoria:")) {
-                                categoria = parte.split(": ")[1].trim();
-                            }
-                        }
 
-                        if (nomeDaEquipa != null && categoria != null) {
-                            equipas.add(new Equipa(nomeDaEquipa, categoria));  // Adiciona a equipa à lista
+                        if (partes.length > 1) {
+                            for (String parte : partes) {
+                                if (parte.startsWith("Nome da Equipa:")) {
+                                    nomeDaEquipa = parte.split(": ")[1].trim();
+                                } else if (parte.startsWith("Categoria:")) {
+                                    categoria = parte.split(": ")[1].trim();
+                                }
+                            }
+
+                            if (nomeDaEquipa != null && categoria != null) {
+                                equipas.add(new Equipa(nomeDaEquipa, categoria));  // Adiciona a equipa à lista
+                            }
+                        } else {
+                            System.out.println("Erro: Formato de linha inválido ou membros não encontrados: " + linha);
                         }
                     } catch (Exception e) {
                         System.out.println("Erro ao processar equipa: " + linha);
@@ -636,21 +857,30 @@ public class ProjetoFinal{
             }
 
             // Exibir pilotos
-            System.out.println("Escolha um piloto da lista abaixo:");
+            System.out.println("Escolha os pilotos da lista abaixo (separe os números com vírgulas):");
             for (int i = 0; i < pilotos.size(); i++) {
                 System.out.println((i + 1) + ". " + pilotos.get(i).getNome());
             }
 
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Digite o número do piloto que deseja adicionar à equipa: ");
-            int pilotoEscolhidoIndex = scanner.nextInt() - 1;
+            System.out.print("Digite os números dos pilotos que deseja adicionar à equipa: ");
+            String inputPilotos = scanner.nextLine();
+            String[] pilotoIndices = inputPilotos.split(",");  // Separa os números dos pilotos escolhidos
 
-            if (pilotoEscolhidoIndex < 0 || pilotoEscolhidoIndex >= pilotos.size()) {
-                System.out.println("Opção inválida para piloto.");
-                return;
+            List<Piloto> pilotosEscolhidos = new ArrayList<>();
+            for (String indice : pilotoIndices) {
+                try {
+                    int pilotoEscolhidoIndex = Integer.parseInt(indice.trim()) - 1;
+
+                    if (pilotoEscolhidoIndex >= 0 && pilotoEscolhidoIndex < pilotos.size()) {
+                        pilotosEscolhidos.add(pilotos.get(pilotoEscolhidoIndex));  // Adiciona o piloto à lista de escolhidos
+                    } else {
+                        System.out.println("Opção inválida para piloto: " + indice);
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Entrada inválida para piloto: " + indice);
+                }
             }
-
-            Piloto pilotoEscolhido = pilotos.get(pilotoEscolhidoIndex);
 
             // Exibir equipas
             System.out.println("Escolha uma equipa da lista abaixo:");
@@ -658,7 +888,7 @@ public class ProjetoFinal{
                 System.out.println((i + 1) + ". " + equipas.get(i).getNomeDaEquipa());
             }
 
-            System.out.print("Digite o número da equipa para adicionar o piloto: ");
+            System.out.print("Digite o número da equipa para adicionar os pilotos: ");
             int equipaEscolhidaIndex = scanner.nextInt() - 1;
 
             if (equipaEscolhidaIndex < 0 || equipaEscolhidaIndex >= equipas.size()) {
@@ -668,16 +898,22 @@ public class ProjetoFinal{
 
             Equipa equipaEscolhida = equipas.get(equipaEscolhidaIndex);
 
-            // Adicionar o piloto à equipa
-            equipaEscolhida.adicionarMembro(pilotoEscolhido);
-            System.out.println("Piloto " + pilotoEscolhido.getNome() + " foi adicionado à equipa " + equipaEscolhida.getNomeDaEquipa());
+            // Adicionar os pilotos à equipa
+            for (Piloto piloto : pilotosEscolhidos) {
+                equipaEscolhida.adicionarMembro(piloto);
+                piloto.adicionarEquipa(equipaEscolhida);  // Adiciona a equipa ao piloto
+                System.out.println("Piloto " + piloto.getNome() + " foi adicionado à equipa " + equipaEscolhida.getNomeDaEquipa());
+            }
 
             // Salvar os dados de volta no arquivo
-            // Salvando as equipas e pilotos no arquivo "dados.txt"
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
                 writer.write("[PILOTOS]\n");
                 for (Piloto p : pilotos) {
-                    writer.write("[Nome: " + p.getNome() + "]\n");
+                    writer.write("[Nome: " + p.getNome() + ", Idade: " + p.getIdade() + ", Nacionalidade: " + p.getNacionalidade() + ", Genero: " + p.getGenero() + ", Experiencia: " + p.getExperiencia() + ", Hierarquia: " + p.getHierarquia() + ", Peso: " + p.getPesoPiloto() + ", Equipas: ");
+                    for (Equipa e : p.getEquipas()) {
+                        writer.write(e.getNomeDaEquipa() + ", ");
+                    }
+                    writer.write("]\n");
                 }
                 writer.write("[EQUIPAS]\n");
                 for (Equipa e : equipas) {
@@ -689,7 +925,6 @@ public class ProjetoFinal{
                     }
                     writer.write("]\n");
                 }
-                writer.close();
             } catch (IOException e) {
                 System.out.println("Erro ao salvar os dados no arquivo.");
             }
@@ -697,9 +932,24 @@ public class ProjetoFinal{
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
         }
     }
-
-
 }
+
+
+
+
+ 
+    
+ 
+
+
+
+
+
+
+
+
+
+
 
             
 

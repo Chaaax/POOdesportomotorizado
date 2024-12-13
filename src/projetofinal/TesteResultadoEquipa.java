@@ -18,8 +18,8 @@ public class TesteResultadoEquipa {
         Equipa equipa = new Equipa("Racing Team", "MotoGP");
         
         // Adicionar membros (pilotos)
-        Piloto piloto1 = new Piloto("João Silva", 28, "Portugal", "Masculino", "Alta", "Profissional", 68.5);
-        Piloto piloto2 = new Piloto("Ana Costa", 25, "Brasil", "Feminino", "Média", "Amadora", 60.0);
+        Piloto piloto1 = new Piloto("João Silva", 28, "Portugal", "Masculino", "Alta");
+        Piloto piloto2 = new Piloto("Ana Costa", 25, "Brasil", "Feminino", "Média");
         equipa.adicionarMembro(piloto1);
         equipa.adicionarMembro(piloto2);
         

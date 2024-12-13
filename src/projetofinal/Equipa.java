@@ -14,7 +14,7 @@ import java.util.List;
 public class Equipa {
     private String nomeDaEquipa;
     private String categoria;
-    private List<Pessoa> membros;
+    private List<Pessoa> membros = new ArrayList<>();
     private List<Veiculo> veiculos;
     private List<String> resultados;
 
@@ -39,10 +39,17 @@ public class Equipa {
         return membros; // Retorna a lista de membros
     }
     
-
-     public void adicionarMembro(Pessoa membro) {
-        membros.add(membro);
-    }
+    public void adicionarMembro(Pessoa membro) {
+            if (membro instanceof Piloto) {
+                Piloto piloto = (Piloto) membro;
+                if (!membros.contains(piloto)) {
+                    membros.add(piloto);
+                    piloto.adicionarEquipa(this); // Adiciona a equipa ao piloto
+                }
+            } else {
+                membros.add(membro);  // Caso seja outro tipo de membro
+            }
+        }
 
     public void adicionarVeiculo(Veiculo veiculo) {
         veiculos.add(veiculo);
@@ -73,6 +80,19 @@ public class Equipa {
         this.resultados = resultados;
     }
     
+    
+    public void mostrarMembros() {
+        if (membros.isEmpty()) {
+            System.out.println("A equipa não tem membros.");
+        } else {
+            for (Pessoa membro : membros) {
+                System.out.println(membro.toString()); // Chama o toString() de cada membro
+            }
+        }
+    }
+
+    
+ 
  /*@Override
     public String toString() {
         return "[Nome da Equipa: " + nomeDaEquipa + ", Categoria: " + categoria + "]";

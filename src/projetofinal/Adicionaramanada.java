@@ -46,7 +46,7 @@ public class Adicionaramanada {
                 String hierarquia = dados[5].split(": ")[1];
                 double peso = Double.parseDouble(dados[6].split(": ")[1]);
 
-                Piloto piloto = new Piloto(nome, idade, nacionalidade, genero, experiencia, hierarquia, peso);
+                Piloto piloto = new Piloto(nome, idade, nacionalidade, genero, experiencia);
                 pilotos.add(piloto);
             }
         } catch (IOException e) {
