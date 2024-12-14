@@ -9,8 +9,12 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -48,7 +52,7 @@ public class ProjetoFinal{
             System.out.println("| 9 - Mostrar Veiculos              |");
             System.out.println("| 10 - Mostrar Equipas              |");
             System.out.println("| 11 - Adicionar Pilotos            |");
-            System.out.println("| 12 - Remover Aluno                |");
+            System.out.println("| 12 - Competicao              |");
             System.out.println("| 13 - Remover cursos               |");
             System.out.println("| 14 - Remover disciplinas          |");
             System.out.println("| 15 - Remover professores          |");
@@ -101,6 +105,10 @@ public class ProjetoFinal{
                      // Exibir equ
                     adicionarPilotoEquipa();
                     break;
+                case 12:
+                     // Exibir equ
+                   gerirCompeticoes();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -150,8 +158,7 @@ public class ProjetoFinal{
 
                         // Salva os dados, incluindo o novo mecânico1
                         
-                        Dados.salvarDados(mecanicos, null, null, null, null);
-
+                        Dados.salvarDados(mecanicos, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                         // Mensagem de confirmação
                         System.out.println("Mecanico registado com sucesso!");
          }
@@ -242,7 +249,7 @@ public class ProjetoFinal{
                          engenheiros.add(engenheiro);
                       
   
-                        Dados.salvarDados(null, null, engenheiros, null, null);
+                        Dados.salvarDados(null, null, (ArrayList<Engenheiro>) engenheiros, null, null, null);
 
                         // Mensagem de confirmação
                         System.out.println("Engenheiro registrado com sucesso!");
@@ -295,11 +302,11 @@ public class ProjetoFinal{
                     String pneus = scanner.nextLine();
 
                     // Cria um objeto Veiculo (precisamos de uma subclasse concreta para instanciar)
-                    Veiculo veiculo = new Veiculo(tipoDeVeiculo, categoria, potencia, peso, cor, numeroDoVeiculo, marcaDoMotor, pneus) {};
+                    Veiculo veiculo = new Veiculo(tipoDeVeiculo) {};
 
                     // Adiciona o veículo à lista
                     veiculos.add(veiculo);
-                    Dados.salvarDados(null, null, null, veiculos, null);
+                    Dados.salvarDados(null, null, null, (ArrayList<Veiculo>) veiculos, null, null);
 
                     System.out.println("Veiculo registrado com sucesso!");
         }  
@@ -320,7 +327,7 @@ public class ProjetoFinal{
 
                     // Adiciona a equipa à lista de equipas
                     equipas.add(equipa);
-                    Dados.salvarDados(null, null, null, null, equipas);
+                    Dados.salvarDados(null, null, null, null, (ArrayList<Equipa>) equipas, null);
 
                     System.out.println("Equipa registrada com sucesso!");
                 }
@@ -600,9 +607,7 @@ public class ProjetoFinal{
     }
 }
 
-
-/* quase perfeito
-public static void adicionarPilotoEquipa() {
+    public static void adicionarPilotoEquipa() {
     try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
         String linha;
         boolean isPilotoSection = false;
@@ -613,52 +618,24 @@ public static void adicionarPilotoEquipa() {
 
         // Ler todos os pilotos e equipas do arquivo
         while ((linha = reader.readLine()) != null) {
-            if (linha.trim().equals("[PILOTOS]")) {
-                isPilotoSection = true;  // Entra na seção dos pilotos
-            } else if (linha.trim().equals("[EQUIPAS]")) {
-                isEquipaSection = true;  // Entra na seção das equipas
-            } else if (linha.trim().equals("[MECANICOS]") || linha.trim().equals("[ENGENHEIROS]") || linha.trim().equals("[VEICULOS]")) {
+            linha = linha.trim();
+            if (linha.equals("[PILOTOS]")) {
+                isPilotoSection = true;
+                isEquipaSection = false;
+            } else if (linha.equals("[EQUIPAS]")) {
                 isPilotoSection = false;
-                isEquipaSection = false;  // Sai das seções dos pilotos e equipas
+                isEquipaSection = true;
+            } else if (linha.equals("[MECANICOS]") || linha.equals("[ENGENHEIROS]") || linha.equals("[VEICULOS]")) {
+                isPilotoSection = false;
+                isEquipaSection = false;
             }
 
             // Processar pilotos
             if (isPilotoSection && linha.contains("Nome:")) {
                 try {
-                    linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-                    String[] partes = linha.split(", ");  // Divide a linha
-
-                    String nomePiloto = null;
-                    int idade = 0;  // Corrigido para idade do piloto
-                    String nacionalidade = null;
-                    String genero = null;
-                    String experiencia = null;
-                    String hierarquia = null;
-                    double pesoPiloto = 0.0;
-
-                    for (String parte : partes) {
-                        if (parte.startsWith("Nome:")) {
-                            nomePiloto = parte.split(": ")[1].trim();
-                        } else if (parte.startsWith("Idade:")) {
-                            idade = Integer.parseInt(parte.split(": ")[1].trim());  // Converte idade para inteiro
-                        } else if (parte.startsWith("Nacionalidade:")) {
-                            nacionalidade = parte.split(": ")[1].trim();
-                        } else if (parte.startsWith("Genero:")) {
-                            genero = parte.split(": ")[1].trim();
-                        } else if (parte.startsWith("Experiencia:")) {
-                            experiencia = parte.split(": ")[1].trim();
-                        } else if (parte.startsWith("Hierarquia:")) {
-                            hierarquia = parte.split(": ")[1].trim();
-                        } else if (parte.startsWith("Peso:")) {
-                            pesoPiloto = Double.parseDouble(parte.split(": ")[1].trim());
-                        }
-                    }
-
-                    if (nomePiloto != null) {
-                        Piloto piloto = new Piloto(nomePiloto, idade, nacionalidade, genero, experiencia);
-                        piloto.setHierarquia(hierarquia);
-                        piloto.setPesoPiloto(pesoPiloto);
-                        pilotos.add(piloto);  // Adiciona o piloto à lista
+                    Piloto piloto = processarPiloto(linha);
+                    if (piloto != null) {
+                        pilotos.add(piloto);
                     }
                 } catch (Exception e) {
                     System.out.println("Erro ao processar piloto: " + linha);
@@ -668,26 +645,9 @@ public static void adicionarPilotoEquipa() {
             // Processar equipas
             if (isEquipaSection && linha.contains("Nome da Equipa:")) {
                 try {
-                    linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-                    String[] partes = linha.split(", ");  // Divide a linha
-
-                    String nomeDaEquipa = null;
-                    String categoria = null;
-
-                    if (partes.length > 1) {
-                        for (String parte : partes) {
-                            if (parte.startsWith("Nome da Equipa:")) {
-                                nomeDaEquipa = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Categoria:")) {
-                                categoria = parte.split(": ")[1].trim();
-                            }
-                        }
-
-                        if (nomeDaEquipa != null && categoria != null) {
-                            equipas.add(new Equipa(nomeDaEquipa, categoria));  // Adiciona a equipa à lista
-                        }
-                    } else {
-                        System.out.println("Erro: Formato de linha inválido ou membros não encontrados: " + linha);
+                    Equipa equipa = processarEquipa(linha);
+                    if (equipa != null) {
+                        equipas.add(equipa);
                     }
                 } catch (Exception e) {
                     System.out.println("Erro ao processar equipa: " + linha);
@@ -696,21 +656,31 @@ public static void adicionarPilotoEquipa() {
         }
 
         // Exibir pilotos
-        System.out.println("Escolha um piloto da lista abaixo:");
+        System.out.println("Escolha os pilotos da lista abaixo (separe os números com vírgulas):");
         for (int i = 0; i < pilotos.size(); i++) {
             System.out.println((i + 1) + ". " + pilotos.get(i).getNome());
         }
 
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Digite o número do piloto que deseja adicionar à equipa: ");
-        int pilotoEscolhidoIndex = scanner.nextInt() - 1;
+        System.out.print("Digite os números dos pilotos que deseja adicionar à equipa: ");
+        String[] pilotoIndices = scanner.nextLine().split(",");
 
-        if (pilotoEscolhidoIndex < 0 || pilotoEscolhidoIndex >= pilotos.size()) {
-            System.out.println("Opção inválida para piloto.");
-            return;
+        List<Piloto> pilotosEscolhidos = new ArrayList<>();
+        for (String indice : pilotoIndices) {
+            try {
+                int pilotoEscolhidoIndex = Integer.parseInt(indice.trim()) - 1;
+                if (pilotoEscolhidoIndex >= 0 && pilotoEscolhidoIndex < pilotos.size()) {
+                    Piloto pilotoEscolhido = pilotos.get(pilotoEscolhidoIndex);
+                    if (!pilotosEscolhidos.contains(pilotoEscolhido)) {
+                        pilotosEscolhidos.add(pilotoEscolhido);
+                    }
+                } else {
+                    System.out.println("Opção inválida para piloto: " + indice);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida para piloto: " + indice);
+            }
         }
-
-        Piloto pilotoEscolhido = pilotos.get(pilotoEscolhidoIndex);
 
         // Exibir equipas
         System.out.println("Escolha uma equipa da lista abaixo:");
@@ -718,7 +688,7 @@ public static void adicionarPilotoEquipa() {
             System.out.println((i + 1) + ". " + equipas.get(i).getNomeDaEquipa());
         }
 
-        System.out.print("Digite o número da equipa para adicionar o piloto: ");
+        System.out.print("Digite o número da equipa para adicionar os pilotos: ");
         int equipaEscolhidaIndex = scanner.nextInt() - 1;
 
         if (equipaEscolhidaIndex < 0 || equipaEscolhidaIndex >= equipas.size()) {
@@ -728,16 +698,136 @@ public static void adicionarPilotoEquipa() {
 
         Equipa equipaEscolhida = equipas.get(equipaEscolhidaIndex);
 
-        // Adicionar o piloto à equipa
-        equipaEscolhida.adicionarMembro(pilotoEscolhido);
-        pilotoEscolhido.adicionarEquipa(equipaEscolhida);  // Adiciona a equipa ao piloto
-        System.out.println("Piloto " + pilotoEscolhido.getNome() + " foi adicionado à equipa " + equipaEscolhida.getNomeDaEquipa());
+        // Adicionar os pilotos à equipa
+        for (Piloto piloto : pilotosEscolhidos) {
+            equipaEscolhida.adicionarMembro(piloto);
+        }
 
         // Salvar os dados de volta no arquivo
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
+        salvarDados("dados.txt", pilotos, equipas);
+
+    } catch (IOException e) {
+        System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+    }
+    }
+
+// Método para processar pilotos
+private static Piloto processarPiloto(String linha) {
+    try {
+        linha = linha.replace("[", "").replace("]", "");
+        String[] partes = linha.split(", ");
+
+        String nomePiloto = null;
+        int idade = 0;
+        String nacionalidade = null;
+        String genero = null;
+        String experiencia = null;
+        String hierarquia = null;
+        double pesoPiloto = 0.0;
+        List<String> equipas = new ArrayList<>();
+
+        for (String parte : partes) {
+            if (parte.contains(":")) {
+                String[] chaveValor = parte.split(": ", 2); // Divide em chave e valor
+                if (chaveValor.length == 2) { // Garante que ambos os lados existem
+                    String chave = chaveValor[0].trim();
+                    String valor = chaveValor[1].trim();
+
+                    switch (chave) {
+                        case "Nome":
+                            nomePiloto = valor;
+                            break;
+                        case "Idade":
+                            idade = Integer.parseInt(valor);
+                            break;
+                        case "Nacionalidade":
+                            nacionalidade = valor;
+                            break;
+                        case "Genero":
+                            genero = valor;
+                            break;
+                        case "Experiencia":
+                            experiencia = valor;
+                            break;
+                        case "Hierarquia":
+                            hierarquia = valor;
+                            break;
+                        case "Peso":
+                            pesoPiloto = Double.parseDouble(valor);
+                            break;
+                        case "Equipas":
+                            if (!valor.isEmpty()) {
+                                String[] equipasArray = valor.split(", ");
+                                equipas.addAll(Arrays.asList(equipasArray));
+                            }
+                            break;
+                        default:
+                            System.out.println("Campo não reconhecido: " + chave);
+                            break;
+                    }
+                } else {
+                    System.out.println("Linha mal formatada: " + parte);
+                }
+            }
+        }
+
+        if (nomePiloto != null) {
+            Piloto piloto = new Piloto(nomePiloto, idade, nacionalidade, genero, experiencia);
+            piloto.setHierarquia(hierarquia);
+            piloto.setPesoPiloto(pesoPiloto);
+
+            // Adicionar equipas ao piloto
+            for (String equipaNome : equipas) {
+                Equipa equipa = new Equipa(equipaNome, ""); // Categoria pode ser preenchida conforme necessário
+                piloto.adicionarEquipa(equipa);
+            }
+
+            return piloto;
+        } else {
+            System.out.println("Nome do piloto não encontrado na linha: " + linha);
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao processar linha de piloto: " + linha);
+        e.printStackTrace();
+    }
+    return null;
+}
+
+
+    // Método para processar equipas
+    private static Equipa processarEquipa(String linha) {
+        try {
+            linha = linha.replace("[", "").replace("]", "");
+            String[] partes = linha.split(", ");
+
+            String nomeDaEquipa = null;
+            String categoria = null;
+
+            for (String parte : partes) {
+                if (parte.startsWith("Nome da Equipa:")) {
+                    nomeDaEquipa = parte.split(": ")[1].trim();
+                } else if (parte.startsWith("Categoria:")) {
+                    categoria = parte.split(": ")[1].trim();
+                }
+            }
+
+            if (nomeDaEquipa != null && categoria != null) {
+                return new Equipa(nomeDaEquipa, categoria);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao processar linha de equipa: " + linha);
+        }
+        return null;
+    }
+
+    // Método para salvar os dados
+    private static void salvarDados(String arquivo, List<Piloto> pilotos, List<Equipa> equipas) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
             writer.write("[PILOTOS]\n");
             for (Piloto p : pilotos) {
-                writer.write("[Nome: " + p.getNome() + ", Idade: " + p.getIdade() + ", Nacionalidade: " + p.getNacionalidade() + ", Genero: " + p.getGenero() + ", Experiencia: " + p.getExperiencia() + ", Hierarquia: " + p.getHierarquia() + ", Peso: " + p.getPesoPiloto() + ", Equipas: ");
+                writer.write("[Nome: " + p.getNome() + ", Idade: " + p.getIdade() + ", Nacionalidade: " + p.getNacionalidade() +
+                        ", Genero: " + p.getGenero() + ", Experiencia: " + p.getExperiencia() +
+                        ", Hierarquia: " + p.getHierarquia() + ", Peso: " + p.getPesoPiloto() + ", Equipas: ");
                 for (Equipa e : p.getEquipas()) {
                     writer.write(e.getNomeDaEquipa() + ", ");
                 }
@@ -747,192 +837,177 @@ public static void adicionarPilotoEquipa() {
             for (Equipa e : equipas) {
                 writer.write("[Nome da Equipa: " + e.getNomeDaEquipa() + ", Categoria: " + e.getCategoria() + ", Membros: ");
                 for (Pessoa membro : e.getMembros()) {
-                    if (membro instanceof Piloto) {
-                        writer.write(((Piloto) membro).getNome() + ", ");
-                    }
+                    writer.write(membro.getNome() + ", ");
                 }
                 writer.write("]\n");
             }
-            writer.close();
         } catch (IOException e) {
-            System.out.println("Erro ao salvar os dados no arquivo.");
+            System.out.println("Erro ao salvar os dados: " + e.getMessage());
         }
-    } catch (IOException e) {
-        System.out.println("Erro ao ler o arquivo: " + e.getMessage());
     }
-}
-*/
-  
-    public static void adicionarPilotoEquipa() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("dados.txt"))) {
-            String linha;
-            boolean isPilotoSection = false;
-            boolean isEquipaSection = false;
+    
+    
+ 
 
-            List<Piloto> pilotos = new ArrayList<>();
-            List<Equipa> equipas = new ArrayList<>();
+    public static void gerirCompeticoes() {
+    Scanner scanner = new Scanner(System.in);
 
-            // Ler todos os pilotos e equipas do arquivo
-            while ((linha = reader.readLine()) != null) {
-                if (linha.trim().equals("[PILOTOS]")) {
-                    isPilotoSection = true;  // Entra na seção dos pilotos
-                } else if (linha.trim().equals("[EQUIPAS]")) {
-                    isEquipaSection = true;  // Entra na seção das equipas
-                } else if (linha.trim().equals("[MECANICOS]") || linha.trim().equals("[ENGENHEIROS]") || linha.trim().equals("[VEICULOS]")) {
-                    isPilotoSection = false;
-                    isEquipaSection = false;  // Sai das seções dos pilotos e equipas
-                }
+    while (true) {
+        // Carregar competições e equipas do ficheiro
+        List<Competicao> competicoes = Dados.carregarCompeticoes(); // Método para carregar competições
+        List<Equipa> equipasRegistradas = Dados.carregarEquipas();  // Método para carregar equipas
 
-                // Processar pilotos
-                if (isPilotoSection && linha.contains("Nome:")) {
-                    try {
-                        linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-                        String[] partes = linha.split(", ");  // Divide a linha
+        System.out.println("\nMenu de Gestão de Competições:");
+        System.out.println("1. Criar Competição");
+        System.out.println("2. Adicionar Equipa a uma Competição");
+        System.out.println("3. Registrar Resultados Individuais");
+        System.out.println("4. Exibir Detalhes das Competições");
+        System.out.println("0. Voltar");
 
-                        String nomePiloto = null;
-                        int idade = 0;
-                        String nacionalidade = null;
-                        String genero = null;
-                        String experiencia = null;
-                        String hierarquia = null;
-                        double pesoPiloto = 0.0;
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
+        scanner.nextLine(); // Consumir quebra de linha
 
-                        for (String parte : partes) {
-                            if (parte.startsWith("Nome:")) {
-                                nomePiloto = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Idade:")) {
-                                idade = Integer.parseInt(parte.split(": ")[1].trim());
-                            } else if (parte.startsWith("Nacionalidade:")) {
-                                nacionalidade = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Genero:")) {
-                                genero = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Experiencia:")) {
-                                experiencia = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Hierarquia:")) {
-                                hierarquia = parte.split(": ")[1].trim();
-                            } else if (parte.startsWith("Peso:")) {
-                                pesoPiloto = Double.parseDouble(parte.split(": ")[1].trim());
-                            }
-                        }
-
-                        if (nomePiloto != null) {
-                            Piloto piloto = new Piloto(nomePiloto, idade, nacionalidade, genero, experiencia);
-                            piloto.setHierarquia(hierarquia);
-                            piloto.setPesoPiloto(pesoPiloto);
-                            pilotos.add(piloto);  // Adiciona o piloto à lista
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Erro ao processar piloto: " + linha);
-                    }
-                }
-
-                // Processar equipas
-                if (isEquipaSection && linha.contains("Nome da Equipa:")) {
-                    try {
-                        linha = linha.replace("[", "").replace("]", "");  // Remove os colchetes
-                        String[] partes = linha.split(", ");  // Divide a linha
-
-                        String nomeDaEquipa = null;
-                        String categoria = null;
-
-                        if (partes.length > 1) {
-                            for (String parte : partes) {
-                                if (parte.startsWith("Nome da Equipa:")) {
-                                    nomeDaEquipa = parte.split(": ")[1].trim();
-                                } else if (parte.startsWith("Categoria:")) {
-                                    categoria = parte.split(": ")[1].trim();
-                                }
-                            }
-
-                            if (nomeDaEquipa != null && categoria != null) {
-                                equipas.add(new Equipa(nomeDaEquipa, categoria));  // Adiciona a equipa à lista
-                            }
-                        } else {
-                            System.out.println("Erro: Formato de linha inválido ou membros não encontrados: " + linha);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Erro ao processar equipa: " + linha);
-                    }
-                }
-            }
-
-            // Exibir pilotos
-            System.out.println("Escolha os pilotos da lista abaixo (separe os números com vírgulas):");
-            for (int i = 0; i < pilotos.size(); i++) {
-                System.out.println((i + 1) + ". " + pilotos.get(i).getNome());
-            }
-
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Digite os números dos pilotos que deseja adicionar à equipa: ");
-            String inputPilotos = scanner.nextLine();
-            String[] pilotoIndices = inputPilotos.split(",");  // Separa os números dos pilotos escolhidos
-
-            List<Piloto> pilotosEscolhidos = new ArrayList<>();
-            for (String indice : pilotoIndices) {
-                try {
-                    int pilotoEscolhidoIndex = Integer.parseInt(indice.trim()) - 1;
-
-                    if (pilotoEscolhidoIndex >= 0 && pilotoEscolhidoIndex < pilotos.size()) {
-                        pilotosEscolhidos.add(pilotos.get(pilotoEscolhidoIndex));  // Adiciona o piloto à lista de escolhidos
-                    } else {
-                        System.out.println("Opção inválida para piloto: " + indice);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Entrada inválida para piloto: " + indice);
-                }
-            }
-
-            // Exibir equipas
-            System.out.println("Escolha uma equipa da lista abaixo:");
-            for (int i = 0; i < equipas.size(); i++) {
-                System.out.println((i + 1) + ". " + equipas.get(i).getNomeDaEquipa());
-            }
-
-            System.out.print("Digite o número da equipa para adicionar os pilotos: ");
-            int equipaEscolhidaIndex = scanner.nextInt() - 1;
-
-            if (equipaEscolhidaIndex < 0 || equipaEscolhidaIndex >= equipas.size()) {
-                System.out.println("Opção inválida para equipa.");
+        switch (opcao) {
+            case 1 -> criarCompeticao(scanner, competicoes);
+            case 2 -> adicionarEquipa(scanner, competicoes, equipasRegistradas);
+            case 3 -> registrarResultados(scanner, competicoes);
+            case 4 -> exibirResultados(competicoes);
+            case 0 -> {
                 return;
             }
-
-            Equipa equipaEscolhida = equipas.get(equipaEscolhidaIndex);
-
-            // Adicionar os pilotos à equipa
-            for (Piloto piloto : pilotosEscolhidos) {
-                equipaEscolhida.adicionarMembro(piloto);
-                piloto.adicionarEquipa(equipaEscolhida);  // Adiciona a equipa ao piloto
-                System.out.println("Piloto " + piloto.getNome() + " foi adicionado à equipa " + equipaEscolhida.getNomeDaEquipa());
-            }
-
-            // Salvar os dados de volta no arquivo
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
-                writer.write("[PILOTOS]\n");
-                for (Piloto p : pilotos) {
-                    writer.write("[Nome: " + p.getNome() + ", Idade: " + p.getIdade() + ", Nacionalidade: " + p.getNacionalidade() + ", Genero: " + p.getGenero() + ", Experiencia: " + p.getExperiencia() + ", Hierarquia: " + p.getHierarquia() + ", Peso: " + p.getPesoPiloto() + ", Equipas: ");
-                    for (Equipa e : p.getEquipas()) {
-                        writer.write(e.getNomeDaEquipa() + ", ");
-                    }
-                    writer.write("]\n");
-                }
-                writer.write("[EQUIPAS]\n");
-                for (Equipa e : equipas) {
-                    writer.write("[Nome da Equipa: " + e.getNomeDaEquipa() + ", Categoria: " + e.getCategoria() + ", Membros: ");
-                    for (Pessoa membro : e.getMembros()) {
-                        if (membro instanceof Piloto) {
-                            writer.write(((Piloto) membro).getNome() + ", ");
-                        }
-                    }
-                    writer.write("]\n");
-                }
-            } catch (IOException e) {
-                System.out.println("Erro ao salvar os dados no arquivo.");
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            default -> System.out.println("Opção inválida! Tente novamente.");
         }
     }
 }
+
+private static void criarCompeticao(Scanner scanner, List<Competicao> competicoes) {
+    System.out.print("Nome da competição: ");
+    String nome = scanner.nextLine();
+
+    System.out.print("Local: ");
+    String local = scanner.nextLine();
+
+    System.out.print("Data (DD-MM-YYYY): ");
+    String data = scanner.nextLine();
+
+    System.out.print("Modalidade: ");
+    String modalidade = scanner.nextLine();
+
+    System.out.print("Número máximo de equipas: ");
+    int maxEquipas = scanner.nextInt();
+    scanner.nextLine();
+
+    try {
+        if (!data.matches("\\d{2}-\\d{2}-\\d{4}")) {
+            System.out.println("Formato de data inválido. Use o formato DD-MM-YYYY.");
+            return;
+        }
+
+        // Criar a competição e adicionar à lista
+        Competicao competicao = new Competicao(nome, local, data, modalidade, maxEquipas);
+        competicoes.add(competicao);
+
+        // Salvar competição no ficheiro
+        Dados.salvarCompeticao(competicao);
+
+        System.out.println("Competição criada com sucesso!");
+    } catch (Exception e) {
+        System.out.println("Erro ao criar competição: " + e.getMessage());
+    }
+}
+
+private static void adicionarEquipa(Scanner scanner, List<Competicao> competicoes, List<Equipa> equipasRegistradas) {
+    if (competicoes.isEmpty()) {
+        System.out.println("Nenhuma competição criada. Crie uma competição primeiro.");
+        return;
+    }
+    if (equipasRegistradas.isEmpty()) {
+        System.out.println("Nenhuma equipa registrada no ficheiro. Registre equipas antes de adicionar.");
+        return;
+    }
+    
+
+    // Exibir competições disponíveis
+    System.out.println("Escolha uma competição:");
+    for (int i = 0; i < competicoes.size(); i++) {
+        System.out.println((i + 1) + ". " + competicoes.get(i).getNomeCompeticao());
+    }
+    
+  
+    
+    System.out.print("Digite o número da competição: ");
+    int escolhaComp;
+    try {
+        escolhaComp = scanner.nextInt() - 1;
+        scanner.nextLine();
+
+        if (escolhaComp < 0 || escolhaComp >= competicoes.size()) {
+            System.out.println("Opção inválida. Escolha uma competição válida.");
+            return;
+        }
+    } catch (InputMismatchException e) {
+        System.out.println("Entrada inválida. Insira um número.");
+        scanner.nextLine();
+        return;
+    }
+
+    Competicao competicao = competicoes.get(escolhaComp);
+
+    // Exibir equipas disponíveis
+    System.out.println("Selecione as equipas para adicionar (separe os números por vírgula):");
+    for (int i = 0; i < equipasRegistradas.size(); i++) {
+        System.out.println((i + 1) + ". " + equipasRegistradas.get(i).getNomeDaEquipa());
+    }
+
+    String[] indices = scanner.nextLine().split(",");
+    for (String indice : indices) {
+        try {
+            int escolhaEquipa = Integer.parseInt(indice.trim()) - 1;
+            if (escolhaEquipa >= 0 && escolhaEquipa < equipasRegistradas.size()) {
+                Equipa equipa = equipasRegistradas.get(escolhaEquipa);
+
+                // Adicionar equipa à competição
+                if (competicao.adicionarEquipa(equipa)) {
+                    System.out.println("Equipa " + equipa.getNomeDaEquipa() + " adicionada com sucesso à competição " + competicao.getNomeCompeticao());
+                } else {
+                    System.out.println("A equipa " + equipa.getNomeDaEquipa() + " já está registrada na competição.");
+                }
+            } else {
+                System.out.println("Índice de equipa inválido: " + indice);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Entrada inválida: " + indice);
+        }
+    }
+
+    // Atualizar a competição no ficheiro
+    Dados.salvarCompeticao(competicao);
+}
+
+private static void registrarResultados(Scanner scanner, List<Competicao> competicoes) {
+    if (competicoes.isEmpty()) {
+        System.out.println("Nenhuma competição criada. Crie uma competição primeiro.");
+        return;
+    }
+
+    System.out.println("Funcionalidade de registro de resultados ainda não implementada.");
+    // Adicione a lógica para registrar resultados individuais aqui.
+}
+
+private static void exibirResultados(List<Competicao> competicoes) {
+    if (competicoes.isEmpty()) {
+        System.out.println("Nenhuma competição criada.");
+        return;
+    }
+
+    for (Competicao competicao : competicoes) {
+        System.out.println("\nDetalhes da competição: " + competicao.getNomeCompeticao());
+        competicao.exibirDetalhes();
+    }
+}
+}
+
 
 
 

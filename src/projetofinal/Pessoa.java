@@ -18,7 +18,7 @@ package projetofinal;
        
      //construtor
        
-       public Pessoa(String nome, int idade, String nacionalidade, String genero, String experiencia){
+       public Pessoa(String nome){
            this.nome=nome;
            this.idade=idade;
            this.nacionalidade=nacionalidade;
@@ -70,31 +70,12 @@ package projetofinal;
             this.experiencia = experiencia;
         }
 
-    /*@Override
-    public String toString() {
-        return "Pessoa{" + "nome=" + nome + ", idade=" + idade + ", nacionalidade=" + nacionalidade + ", genero=" + genero + ", experiencia=" + experiencia + '}';
-    }
-        
-       */
-        
+ 
         @Override
        public String toString() {
                return getNome() + "," + getIdade() + "," + getNacionalidade() + "," + getGenero() + "," + getExperiencia();}
         
         
-        
-        
-        /**
-           *Exibir informaçoes pessoa 
-        */
-         
-        /**
-        public void exibirInformacoes() {
-            System.out.println("Nome: " + nome);
-            System.out.println("Idade: " + idade);
-            System.out.println("Gênero: " + genero);
-            System.out.println("Nacionalidade: " + nacionalidade);
-        }
-        */
+   
     }   
 

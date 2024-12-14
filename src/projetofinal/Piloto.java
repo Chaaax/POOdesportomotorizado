@@ -19,19 +19,14 @@ public class Piloto extends Pessoa {
     private List<Equipa> equipas;
  
   public Piloto(String nome, int idade, String nacionalidade, String genero, String experiencia) {
-        super(nome, idade, nacionalidade, genero, experiencia);
+        super(nome);
         this.hierarquia = hierarquia;
         this.pesoPiloto = pesoPiloto;
         this.equipas = new ArrayList<>();
     }
 
     // Construtor alternativo apenas com o nome
-    public Piloto(String nome) {
-        super(nome, 0, "", "", ""); // Inicializa com valores padrão
-        this.hierarquia = "";
-        this.pesoPiloto = 0.0;
-        this.equipas = new ArrayList<>();
-    }
+    
       
       
     public String getHierarquia() {
@@ -63,31 +58,14 @@ public class Piloto extends Pessoa {
     
     
     
-      public void adicionarEquipa(Equipa equipa) {
-        if (equipas != null) {
-            if (!equipas.contains(equipa)) {
-                equipas.add(equipa);
-            } else {
-                System.out.println("Este piloto já pertence a esta equipa.");
-            }
-        } else {
-            System.out.println("Erro: Lista de equipas não inicializada.");
-        }
-    }
-
-    
-   /*@Override
-    public String toString() {
-        return "Nome: " + getNome() + 
-               ", Idade: " + getIdade() + 
-               ", Nacionalidade: " + getNacionalidade() + 
-               ", Genero: " + getGenero() + 
-               ", Experiencia: " + getExperiencia() + 
-               ", Hierarquia: " + hierarquia +
-               ", Peso: " + pesoPiloto +
-               ", Equipa: " + equipas;
-}
-   */
+    public void adicionarEquipa(Equipa equipa) {
+      if (this.equipas == null) {
+          this.equipas = new ArrayList<>();
+      }
+      if (!this.equipas.contains(equipa)) {
+          this.equipas.add(equipa);
+      }
+  }
     
     @Override
 public String toString() {

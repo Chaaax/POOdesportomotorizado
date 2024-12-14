@@ -1,5 +1,14 @@
+[MECANICOS]
 [PILOTOS]
-[Nome: Max, Idade: 26, Nacionalidade: pt, Genero: masculino, Experiencia: pouca, Hierarquia: primeiro, Peso: 56.0, Equipas: F1team, ]
-[Nome: Checo, Idade: 34, Nacionalidade: mexicano, Genero: masculino, Experiencia: pouca, Hierarquia: segundo, Peso: 79.0, Equipas: ]
+[ENGENHEIROS]
+[VEICULOS]
 [EQUIPAS]
-[Nome da Equipa: F1team, Categoria: F1, Membros: Max, ]
+[Nome da Equipa: formuawfe, Categoria: f1, Membros: Nenhum membro registrado, Veículos: Nenhum veículo registrado, Resultados: Nenhum resultado registrado]
+[Nome da Equipa: RedBull, Categoria: F1, Membros: Nenhum membro registrado, Veículos: Nenhum veículo registrado, Resultados: Nenhum resultado registrado]
+[Nome da Equipa: Ferrari, Categoria: F1, Membros: Nenhum membro registrado, Veículos: Nenhum veículo registrado, Resultados: Nenhum resultado registrado]
+
+
+[COMPETICOES]
+Nome: BOTA, Local: pinhal, Data: 12-12-1231, Modalidade: Droga, Máximo de Equipas: 10, Equipas: []
+Nome: BOTA, Local: pinhal, Data: 12-12-1231, Modalidade: Droga, Máximo de Equipas: 10, Equipas: [formuawfe]
+Nome: BOTA, Local: pinhal, Data: 12-12-1231, Modalidade: Droga, Máximo de Equipas: 10, Equipas: [Ferrari]

@@ -25,7 +25,7 @@ package projetofinal;
         */
 
         public Engenheiro(String nome, int idade, String nacionalidade, String genero, String experiencia, String especializaçao) {
-            super(nome, idade, nacionalidade, genero,experiencia );
+            super(nome);
             this.especializaçao = especializaçao;
         }
 
